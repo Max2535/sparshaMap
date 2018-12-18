@@ -1,6 +1,51 @@
-@media (max-width: 767px) {
-    /* On small screens, the nav menu spans the full width of the screen. Leave a space for it. */
-    body {
-        padding-top: 50px;
-    }
+
+#root {
+    height: 100%;
 }
+
+.map {
+    height:100%;
+}
+
+.message-form {
+    z-index: 500;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: 70px;
+    margin-right:14px;
+}
+
+.message-form-member {
+    z-index: 500;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 15px;
+}
+
+.loc {
+    z-index: 500;
+    margin-left: 14px;
+    margin-top: 150px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+}
+.loc-member {
+    z-index: 500;
+    margin-left: 14px;
+    margin-top: 90px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0;
+}
+.search {
+    width: 100%;
+}
+.branch {
+    width: 200px;
+}
+
