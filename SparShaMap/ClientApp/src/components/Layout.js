@@ -16,10 +16,7 @@ export default props => (
 );*/
 import React from 'react';
 import {
-    Table,
     Container,
-    Row,
-    Col,
     Collapse,
     Navbar,
     NavbarToggler,
@@ -31,20 +28,46 @@ import {
     DropdownToggle,
     DropdownMenu,
     DropdownItem,
-    Breadcrumb,
-    BreadcrumbItem,
     Badge
 } from 'reactstrap';
 import { Glyphicon } from 'react-bootstrap';
-export default class Home extends React.Component {
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
+import { actionCreators } from '../store/session';
+
+
+const jwt = require('jsonwebtoken');
+class Layout extends React.Component {
     constructor(props) {
         super(props);
 
         this.toggle = this.toggle.bind(this);
         this.state = {
-            isOpen: false
+            isOpen: false,
+            name:""
         };
     }
+    componentDidMount() {
+        //ต้อง call จาก api
+        try {
+            var decoded = jwt.verify(this.props.token, 'Super secret key');//debug
+            this.setState({
+                name: decoded.unique_name
+            });
+        } catch (error) {
+            console.log(error);
+            if (window.location.href.indexOf("Login") < 0) {
+
+                var userData = sessionStorage.getItem('userData');
+                if (userData===null) {
+                    window.location.href = "/Login";//goto login
+                }
+            }
+        }
+        
+    }
+
     toggle() {
         this.setState({
             isOpen: !this.state.isOpen
@@ -53,47 +76,43 @@ export default class Home extends React.Component {
     render() {
         var check = false;
         return (
-            <div>{(window.location.href).indexOf('Member') < 0 ?
+            <div>{(window.location.href).indexOf('Member') < 0?
                 <div>
                 <Navbar color="dark" dark expand="sm">
-                    <NavbarBrand href="/">reactstrap</NavbarBrand>
+                    <NavbarBrand href="/">SparSha</NavbarBrand>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
-                        <Nav className="ml-auto" navbar>
-                            <NavItem>
-                                {check = (window.location.href).indexOf('User') > 0}
-                                <NavLink active={check} href="/User"><h5>{check ? <Badge color="secondary">จัดการสมาชิก</Badge> : "จัดการสมาชิก"}</h5></NavLink>
+                            <Nav className="ml-auto" navbar>
+                                <NavItem>
+                                    <Glyphicon glyph="align-left" />
+                                    <Link a className='btn btn-default pull-left' to={`/Users`}>จัดการสมาชิก</Link>
                             </NavItem>
                             <NavItem>
-                                {check = (window.location.href).indexOf('Ads') > 0}
-                                <NavLink active={check} href="/Ads"><h5>{check ? <Badge color="secondary">จัดการโฆษณา</Badge> : "จัดการโฆษณา"}</h5></NavLink>
+                                    <Link a className='btn btn-default pull-left' to={`/Ads`}>จัดการโฆษณา</Link>
                             </NavItem>
                             <NavItem>
-                                {check = (window.location.href).indexOf('Promotion') > 0}
-                                <NavLink active={check} href="/Promotion"><h5>{check ? <Badge color="secondary">จัดการโปรโมชั่น</Badge> : "จัดการโปรโมชั่น"}</h5></NavLink>
+                                    <Link a className='btn btn-default pull-left' to={`/Promotion`}>จัดการโปรโมชั่น</Link>
                             </NavItem>
                             <NavItem>
-                                {check = (window.location.href).indexOf('Notification') > 0}
-                                <NavLink active={check} href="/Notification"><h5>{check ? <Badge color="secondary">การแจ้งเตือน</Badge> : "การแจ้งเตือน"}</h5></NavLink>
+                                    <Link a className='btn btn-default pull-left' to={`/Notification`}>การแจ้งเตือน</Link>
                             </NavItem>
                             <NavItem>
-                                {check = (window.location.href).indexOf('Mapadmin') > 0}
-                                <NavLink active={check} href="/Mapadmin"><h5>{check ? <Badge color="secondary">Map</Badge> : "Map"}</h5></NavLink>
+                                    <Link a className='btn btn-default pull-left' to={`/Mapadmin`}>Map</Link>
                             </NavItem>
                             <UncontrolledDropdown nav inNavbar>
-                                <DropdownToggle nav caret>
-                                    User Login
+                                    <DropdownToggle nav caret>
+                                        {this.state.name}
                                     </DropdownToggle>
                                 <DropdownMenu right>
                                     <DropdownItem>
-                                        Option 1
+                                        แจ้งเตือน
                                         </DropdownItem>
                                     <DropdownItem>
-                                        Option 2
+                                        ตั้งค่า
                                         </DropdownItem>
                                     <DropdownItem divider />
                                     <DropdownItem>
-                                        Reset
+                                        ออกจากระบบ
                                         </DropdownItem>
                                 </DropdownMenu>
                             </UncontrolledDropdown>
@@ -108,3 +127,8 @@ export default class Home extends React.Component {
         );
     }
 }
+
+export default connect(
+    state => state.session,
+    dispatch => bindActionCreators(actionCreators, dispatch)
+)(Layout);

@@ -1,5 +1,4 @@
 import 'bootstrap/dist/css/bootstrap.css';
-//import 'bootstrap/dist/css/bootstrap-theme.css';
 import 'leaflet/dist/leaflet.css';
 import './index.css';
 import React from 'react';
