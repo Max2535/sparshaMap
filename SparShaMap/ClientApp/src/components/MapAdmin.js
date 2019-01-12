@@ -188,20 +188,15 @@ class MapAdmin extends React.Component {
         });
     }
     //ดึกข้อมูลตำแหน่งปัจจุบัน
-    componentDidMount() {
+    async componentDidMount() {
         this.getGeoLocation();
-        fetch("https://56d9dd18.ngrok.io/api/sparshaapi/getbranch", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json"
-            }
-        })
-            .then(res => res.json())
-            .then(branch => {
-                this.setState({ branchList: branch });
-                console.log(branch);
-            });
+
+
+        const url = `api/dynamicapi/getbranch`;
+        const response = await fetch(url);
+        const json = await response.json();
+        console.log(json);
+        this.setState({ branchList: json });
     }
     getGeoLocation() {
         navigator.geolocation.getCurrentPosition(

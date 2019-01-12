@@ -21,7 +21,9 @@ namespace SparShaMap.Controllers
         {
             try
             {
-                string sql = "";
+                string sql = "SELECT * "
+               + "FROM [M_ADS] "
+               + "WHERE GETDATE()>EFF_DATE and GETDATE()<END_DATE and REC_STATUS='Y'";
                 var result = _db.SelectQueryNoAsync(sql);
                 var list = result.Skip(startDateIndex).Take(5);
                 return Ok(list);

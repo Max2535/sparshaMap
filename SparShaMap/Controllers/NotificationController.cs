@@ -9,22 +9,21 @@ namespace SparShaMap.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PromotionController : ControllerBase
+    public class NotificationController : ControllerBase
     {
         public IActionResult Index()
         {
-            return Ok("Promotion Api");
+            return Ok("Notification Api");
         }
-
         private readonly DataBaseService _db = new DataBaseService();
         [HttpGet("SearchData")]
         public async Task<IActionResult> SearchData(int startDateIndex)
         {
             try
             {
-                string sql= "SELECT [PACKAGE_NAME],[DATA_AREA],[EFF_DATE],[END_DATE] "
-                + "FROM [M_PROMOTION] "
-                + "WHERE GETDATE()>EFF_DATE and GETDATE()<END_DATE and REC_STATUS='Y'";
+                string sql = "SELECT * "
+               + "FROM [M_NOTIFICATION] "
+               + "WHERE GETDATE()>EFF_DATE and GETDATE()<END_DATE and REC_STATUS='Y'";
                 var result = _db.SelectQueryNoAsync(sql);
                 var list = result.Skip(startDateIndex).Take(5);
                 return Ok(list);

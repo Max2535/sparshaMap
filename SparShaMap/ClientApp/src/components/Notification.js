@@ -2,10 +2,11 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { actionCreators } from '../store/users';
+import { actionCreators } from '../store/notification';
 import { Col, FormText, Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label, Form, FormGroup } from 'reactstrap';
 import SweetAlert from 'react-bootstrap-sweetalert';
 import ReactLoading from 'react-loading';
+import Moment from 'react-moment';
 class Notification extends Component {
     constructor(props) {
         super(props);
@@ -91,7 +92,7 @@ class Notification extends Component {
         console.log("nextStartDateIndex:" + nextStartDateIndex);
         return (
             <div>
-                <h1>จัดการสมาชิก</h1>
+                <h1>จัดการการแจ้งเตือน</h1>
                 {this.props.isLoading ?
                     <center><ReactLoading type={"spokes"} color="#000" /></center> :
                     <div>
@@ -99,9 +100,9 @@ class Notification extends Component {
                             <thead>
                                 <tr>
                                     <th>ลำดับ</th>
-                                    <th>ชื่อ</th>
-                                    <th>สกุล</th>
-                                    <th>รหัสสมาชิก</th>
+                                    <th>ชื่อการแจ้งเตือน</th>
+                                    <th>รายละเอียดการแจ้งเตือน</th>
+                                    <th>ระยะเวลาการแจ้งเตือน</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -109,9 +110,11 @@ class Notification extends Component {
                                 {this.props.jsonData.map((data, index) =>
                                     <tr key={this.props.startDateIndex + index + 1}>
                                         <td>{this.props.startDateIndex + index + 1}</td>
-                                        <td>{data.FIRST_NAME_TH}</td>
-                                        <td>{data.LAST_NAME_TH}</td>
-                                        <td>{data.CUS_ID}{' '}</td>
+                                        <td>{data.NOTIFICATION_NAME}</td>
+                                        <td>{data.NOTIFICATION_DETAIL}</td>
+                                        <td><Moment format="DD/MM/YYYY">
+                                            {data.EFF_DATE}</Moment> - <Moment format="DD/MM/YYYY">
+                                                {data.END_DATE}</Moment>{' '}</td>
                                         <td><Button onClick={()=>alert('ส่งเรียบร้อย')} color="success">ส่ง</Button>{' '}<Button onClick={this.toggle} color="warning">แก้ไข</Button>{' '}
                                             <a onClick={() => this.deleteData(data.FIRST_NAME_TH)} className='btn btn-danger'>
                                                 <i className="fa fa-trash" aria-hidden="true"></i> ลบ
